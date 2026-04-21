@@ -1,0 +1,725 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#1f2933">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Generator Opinii">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<title>Generator opinii – SYSTEM PRO MAX</title>
+
+<style>
+:root {
+  --bg:#eef3f6;
+  --panel:#ffffff;
+  --ink:#1f2933;
+  --muted:#687785;
+  --line:#d7e0e7;
+  --accent:#23865b;
+  --accent-soft:#e7f5ee;
+  --danger:#d94b42;
+  --shadow:0 10px 28px rgba(31,41,51,.10);
+}
+
+* { box-sizing:border-box }
+
+html { scroll-behavior:smooth }
+
+body {
+  font-family: Arial, sans-serif;
+  max-width:980px;
+  margin:0 auto;
+  padding:20px 18px calc(96px + env(safe-area-inset-bottom));
+  background:linear-gradient(180deg,#f8fbfc 0,#eef3f6 260px,#eef3f6 100%);
+  color:var(--ink);
+  -webkit-text-size-adjust:100%;
+  touch-action:manipulation;
+}
+
+h1 {
+  margin:6px 0 20px;
+  padding:18px 16px;
+  border-radius:12px;
+  background:#1f2933;
+  color:white;
+  font-size:26px;
+  line-height:1.15;
+  box-shadow:var(--shadow);
+}
+
+.box {
+  background:var(--panel);
+  padding:18px;
+  border:1px solid var(--line);
+  border-radius:12px;
+  margin-bottom:16px;
+  box-shadow:0 6px 18px rgba(31,41,51,.06);
+}
+
+label {
+  display:block;
+  margin-top:14px;
+  margin-bottom:6px;
+  font-weight:bold;
+  color:#263442;
+}
+
+select, input, textarea {
+  width:100%;
+  min-height:46px;
+  padding:11px 12px;
+  margin-top:5px;
+  border:1px solid var(--line);
+  border-radius:10px;
+  background:#fbfdfe;
+  color:var(--ink);
+  font-size:16px;
+  outline:none;
+  box-shadow:inset 0 1px 2px rgba(31,41,51,.05);
+}
+
+select:focus, input:focus, textarea:focus {
+  border-color:var(--accent);
+  box-shadow:0 0 0 3px rgba(35,134,91,.18);
+  background:white;
+}
+
+textarea {
+  min-height:96px;
+  resize:vertical;
+  -webkit-overflow-scrolling:touch;
+}
+
+button {
+  min-height:48px;
+  padding:12px 18px;
+  margin:5px;
+  border:0;
+  border-radius:10px;
+  background:#1f2933;
+  color:white;
+  font-size:16px;
+  font-weight:bold;
+  cursor:pointer;
+  touch-action:manipulation;
+  -webkit-tap-highlight-color:transparent;
+  box-shadow:0 6px 14px rgba(31,41,51,.16);
+}
+
+button:active { transform:translateY(1px) }
+
+h2 {
+  margin:4px 0 14px;
+  padding-bottom:8px;
+  border-bottom:1px solid var(--line);
+  color:#17212b;
+}
+
+.tile-grid {
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+  margin-top:8px;
+}
+
+.tile {
+  background:#f7f9fa;
+  border:1px solid var(--line);
+  padding:12px 8px;
+  border-radius:10px;
+  cursor:pointer;
+  text-align:center;
+  min-height:48px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:#263442;
+  font-weight:600;
+  user-select:none;
+  -webkit-user-select:none;
+  touch-action:manipulation;
+  -webkit-tap-highlight-color:transparent;
+  transition:background .16s ease, color .16s ease, border-color .16s ease, transform .08s ease, box-shadow .16s ease;
+}
+
+.tile:active { transform:scale(.98) }
+
+.tile.active {
+  background:var(--accent);
+  border-color:var(--accent);
+  color:white;
+  box-shadow:0 6px 16px rgba(35,134,91,.22);
+}
+
+.action-bar {
+  position:sticky;
+  bottom:0;
+  z-index:10;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+  margin:0 -18px 12px;
+  padding:12px 18px calc(12px + env(safe-area-inset-bottom));
+  background:rgba(238,243,246,.92);
+  border-top:1px solid var(--line);
+  backdrop-filter:blur(12px);
+  -webkit-backdrop-filter:blur(12px);
+}
+
+.action-bar button {
+  width:100%;
+  margin:0;
+}
+
+#wynik {
+  min-height:420px;
+  font-family:Arial, sans-serif;
+  line-height:1.35;
+}
+
+@media (max-width:640px) {
+  body { padding:14px 12px calc(94px + env(safe-area-inset-bottom)) }
+  h1 { font-size:22px; border-radius:10px }
+  .box { padding:14px; border-radius:10px }
+  .tile-grid { gap:8px }
+  .action-bar { margin-left:-14px; margin-right:-14px; padding-left:14px; padding-right:14px }
+}
+</style>
+</head>
+
+<body>
+
+<h1>Generator opinii – SYSTEM PRO MAX</h1>
+
+<!-- ===== DODANE: DANE PODSTAWOWE ===== -->
+<div class="box">
+<h2>Dane podstawowe</h2>
+<input id="imie" placeholder="Imię i nazwisko">
+<input id="wiek" placeholder="Wiek">
+<textarea id="choroby" placeholder="Choroby"></textarea>
+</div>
+
+<script>
+function pole(id,label,opcje){
+let opt='<option></option>';
+opcje.forEach(o=>opt+=`<option>${o}</option>`);
+return `<label>${label}</label>
+<select id="${id}">${opt}</select>
+<input id="${id}_uwagi" placeholder="Uwagi...">`;
+}
+
+function tilePole(id,label,opcje){
+let html=`<label>${label}</label><div class="tile-grid">`;
+opcje.forEach(o=>{
+html+=`<div class="tile" data-group="${id}" data-value="${o}" onclick="toggleTile(this)">${o}</div>`;
+});
+html+=`</div><input id="${id}_uwagi" placeholder="Uwagi...">`;
+return html;
+}
+
+function toggleTile(el){
+el.classList.toggle("active");
+}
+</script>
+
+<label>Technologie wspomagające</label>
+<div class="tile-grid">
+<div class="tile" data-group="sprzet" data-value="laska" onclick="toggleTile(this)">laska</div>
+<div class="tile" data-group="sprzet" data-value="kule inwalidzkie" onclick="toggleTile(this)">kule inwalidzkie</div>
+<div class="tile" data-group="sprzet" data-value="balkonik" onclick="toggleTile(this)">balkonik</div>
+<div class="tile" data-group="sprzet" data-value="wózek pchany przez opiekuna" onclick="toggleTile(this)">wózek pchany</div>
+<div class="tile" data-group="sprzet" data-value="wózek elektryczny" onclick="toggleTile(this)">wózek elektryczny</div>
+<div class="tile" data-group="sprzet" data-value="wózek aktywny" onclick="toggleTile(this)">wózek aktywny</div>
+<div class="tile" data-group="sprzet" data-value="łóżko rehabilitacyjne" onclick="toggleTile(this)">łóżko</div>
+<div class="tile" data-group="sprzet" data-value="materac przeciwodleżynowy" onclick="toggleTile(this)">materac</div>
+<div class="tile" data-group="sprzet" data-value="aparaty słuchowe" onclick="toggleTile(this)">aparaty</div>
+<div class="tile" data-group="sprzet" data-value="stomia" onclick="toggleTile(this)">stomia</div>
+<div class="tile" data-group="sprzet" data-value="cewnik" onclick="toggleTile(this)">cewnik</div>
+</div>
+<input id="sprzet_uwagi" placeholder="Uwagi...">
+</div>
+<h3>Dodatkowe informacje</h3>
+
+<label>niemożność wypełnienia kwestionariusza samooceny</label>
+<div class="tile-grid">
+  <div class="tile" data-group="pyt1" data-value="TAK" onclick="toggleYesNo(this)">TAK</div>
+  <div class="tile" data-group="pyt1" data-value="NIE" onclick="toggleYesNo(this)">NIE</div>
+</div>
+
+<label>pozyskanie informacji od opiekuna fizycznego osoby zainteresowanej</label>
+<div class="tile-grid">
+  <div class="tile" data-group="pyt2" data-value="TAK" onclick="toggleYesNo(this)">TAK</div>
+  <div class="tile" data-group="pyt2" data-value="NIE" onclick="toggleYesNo(this)">NIE</div>
+</div>
+
+<label>korzystanie z technologii wspomagających</label>
+<div class="tile-grid">
+  <div class="tile" data-group="pyt3" data-value="TAK" onclick="toggleYesNo(this)">TAK</div>
+  <div class="tile" data-group="pyt3" data-value="NIE" onclick="toggleYesNo(this)">NIE</div>
+</div>
+
+<label>prowadzenie jednoosobowego gospodarstwa domowego</label>
+<div class="tile-grid">
+  <div class="tile" data-group="pyt4" data-value="TAK" onclick="toggleYesNo(this)">TAK</div>
+  <div class="tile" data-group="pyt4" data-value="NIE" onclick="toggleYesNo(this)">NIE</div>
+</div>
+
+<label>samodzielne zarobkowanie</label>
+<div class="tile-grid">
+  <div class="tile" data-group="pyt5" data-value="TAK" onclick="toggleYesNo(this)">TAK</div>
+  <div class="tile" data-group="pyt5" data-value="NIE" onclick="toggleYesNo(this)">NIE</div>
+</div>
+
+</script>
+
+<script>
+function pole(id,label,opcje){
+let opt='<option></option>';
+opcje.forEach(o=>opt+=`<option>${o}</option>`);
+return `<label>${label}</label>
+<select id="${id}">${opt}</select>
+<input id="${id}_uwagi" placeholder="Uwagi...">`;
+}
+
+function tilePole(id,label,opcje){
+let html=`<label>${label}</label><div class="tile-grid">`;
+opcje.forEach(o=>{
+html+=`<div class="tile" data-group="${id}" data-value="${o}" onclick="toggleTile(this)">${o}</div>`;
+});
+html+=`</div><input id="${id}_uwagi" placeholder="Uwagi...">`;
+return html;
+}
+
+function toggleTile(el){
+el.classList.toggle("active");
+}
+</script>
+<script>
+function toggleYesNo(el){
+  const group = el.dataset.group;
+  const tiles = document.querySelectorAll(`[data-group="${group}"]`);
+
+  tiles.forEach(t => {
+    t.classList.remove("active");
+    t.style.background = "#f1f1f1";
+    t.style.color = "black";
+  });
+
+  el.classList.add("active");
+
+  if(el.dataset.value === "TAK"){
+    el.style.background = "#4CAF50";
+    el.style.color = "white";
+  } else {
+    el.style.background = "#f44336";
+    el.style.color = "white";
+  }
+}
+
+</script>
+
+<!-- ================= 1 MOBILNOŚĆ ================= -->
+<div class="box"><h2>Mobilność</h2>
+<script>
+document.write(
+pole('pozycja','Zmiana pozycji ciała',['samodzielnie','z pomocą','z pomocą częściową','wymaga stałej opieki'])+
+pole('dom','Poruszanie się w mieszkaniu',['samodzielnie','z pomocą','z pomocą częściową','wymaga stałej opieki'])+
+pole('poza','Poruszanie się poza mieszkaniem',['samodzielnie','z pomocą','z pomocą częściową','wymaga stałej opieki'])+
+pole('schody','Pokonywanie schodów',['samodzielnie','z pomocą','z pomocą częściową','wymaga stałej opieki'])+
+pole('transport','Transport',['samodzielnie','z pomocą','z pomocą częściową','transport medyczny'])+
+tilePole('manualna','Sprawność manualna',[
+'zachowana','nieznacznie obniżona','słaby chwyt','brak precyzji',
+'brak współpracy oburącz','drżenie rąk','sprawna prawa ręka',
+'sprawna lewa ręka','brak zdolności manualnych'
+])
+);
+</script>
+</div>
+
+<!-- ================= 2 KOMUNIKACJA ================= -->
+<div class="box"><h2>Komunikowanie się</h2>
+<script>
+document.write(
+tilePole('wzrok','Wzrok',[
+'prawidłowy','okulary','niedowidzenie','po zaćmie','brak wzroku'
+])+
+tilePole('sluch','Słuch',[
+'prawidłowy','lewe ucho','prawe ucho','obustronny','aparaty słuchowe','lekka bariera','znaczna bariera'
+])+
+pole('rozumienie','Rozumienie',['rozumie','nie rozumie'])+
+pole('odpowiedzi','Odpowiedzi',['logiczne','mało logiczne','brak odpowiedzi','komunikacja gestami'])+
+pole('rozmowa','Prowadzenie rozmowy',['inicjuje','kontynuuje','wymaga wsparcia','brak'])+
+tilePole('orientacja','Orientacja',[
+'zorientowany','rozpoznaje rodzinę','niezorientowany','nie rozpoznaje osób'
+])+
+pole('czytanie','Czytanie',['czyta','czyta bez zrozumienia','czyta ze zrozumieniem'])+
+tilePole('pisanie','Pisanie',[
+'nie pisze','pisze krótkie teksty','pisze','podpisuje się','brak podpisu'
+])
+);
+</script>
+</div>
+
+<!-- ================= 3 POZNAWCZE ================= -->
+<div class="box"><h2>Nabywanie i stosowanie wiedzy</h2>
+<script>
+document.write(
+pole('nauka','Nabywanie nowych umiejętności',['brak zdolności','po instruktarzu','samodzielnie'])+
+tilePole('telefon','Obsługa telefonu',['nie potrafi','telefon senioralny','smartfon','połączenia','sms','bankowość'])+
+pole('pilot','Obsługa pilota',['obsługuje','nie obsługuje'])+
+pole('agd','Obsługa sprzętu AGD',['nie obsługuje','częściowo','w zasięgu','obsługuje'])+
+pole('decyzje','Podejmowanie decyzji',['samodzielnie','we współudziale','decyzje podejmuje opiekun','opiekun prawny'])+
+pole('koncentracja','Koncentracja',['zachowana','obniżona z wiekiem','osłabiona','znacznie zaburzona'])+
+pole('pamiec','Pamięć',['zachowana','obniżona z wiekiem','osłabiona','bardzo słaba'])
+);
+</script>
+</div>
+
+<!-- ================= 4 DBANIE ================= -->
+<div class="box"><h2>Dbanie o siebie i zdrowie</h2>
+<script>
+document.write(
+tilePole('kapiel','Kąpiel',[
+'Samodzielnie','z pomocą','brak zdolności','prysznic','wanna','na siedząco','na stojąco','na leżąco w łóżku'
+])+
+tilePole('mycie','Mycie rąk i twarzy',[
+'Samodzielnie','z pomocą','brak zdolności','przy balkoniku','miska do łóżka'
+])+
+pole('zeby','Zęby / włosy',['Samodzielnie','z pomocą','brak zdolności'])+
+pole('paznokcie','Paznokcie / golenie',['Samodzielnie','z pomocą','brak zdolności'])+
+tilePole('ubieranie','Ubieranie',[
+'samodzielnie','z pomocą','brak zdolności','trzeba przygotować ubranie','trudności w założeniu górnych elementów','trudności w założeniu dolnych elementów','brak umiejętności dostosowania do warunków'
+])+
+tilePole('toaleta','Toaleta',[
+'samodzielnie','z pomocą','pampersy','stomia','cewnik','nie zgłasza zanieczyszczenia','brudzi kałem','nietrzymanie moczu'
+])+
+pole('leki','Leki',['samodzielnie','z pomocą'])+
+pole('wizyty','Wizyty',['samodzielnie','z pomocą','brak zdolności'])+
+tilePole('posilki','Posiłki',[
+'samodzielnie','trzeba odpowiednio przygotować','wymaga pomocy w spożywaniu','wymaga karmienia','PEG'
+])+
+pole('pozostawanie','Pozostawanie w domu',['zdolny','brak zdolności'])
+);
+</script>
+</div>
+
+<!-- ================= 5 ================= -->
+<div class="box"><h2>Kontakty interpersonalne</h2>
+<script>
+document.write(
+pole('mieszka','Mieszka z',['Samotnie','współmałżonkiem'])+
+pole('dzieci','Dzieci',['Nie posiada','posiada'])+
+pole('odwiedziny','Odwiedziny',['Jednostronne','dwustronne'])+
+pole('relacje','Relacje',['Utrzymuje','Nie utrzymuje'])+
+tilePole('psychika','Stan psychiczny',[
+'Stabilny emocjonalnie','wymagający wsparcia otoczenia','depresja','zaburzenia lękowe','choroba psychiczna','leczenie psychiatryczne'
+])+
+pole('psycholog','Psycholog',['Tak','nie'])+
+pole('psychiatra','Psychiatra',['Tak','nie'])+
+tilePole('leki_psych','Leki psychiatryczne',[
+'Tak','nie','antydepresanty','przeciw lękowe','nasenne'
+])
+);
+</script>
+</div>
+
+<!-- ================= 6 ================= -->
+<div class="box"><h2>Aktywność w gospodarstwie domowym</h2>
+<script>
+document.write(
+tilePole('zakupy','Zakupy',[
+'Zdolny','brak zdolności','z pomocą','tylko jako osoba towarzysząca','zgłasza potrzeby zakupowe','przygotowuje listę','ma rozeznanie w cenach'
+])+
+tilePole('dom_prace','Dom i ubrania',[
+'Zdolny','brak zdolności','zdolny w ograniczonym zakresie','wykonuje tylko lekkie prace','z pomocą'
+])+
+tilePole('posilki_dom','Posiłki',[
+'Zdolny','brak zdolności','przygotowuje tylko proste posiłki','podgrzewa gotowe potrawy','sięga produkty z lodówki'
+])
+);
+</script>
+</div>
+
+<!-- ================= 7 ================= -->
+<div class="box"><h2>Funkcjonowanie w społeczeństwie</h2>
+<script>
+document.write(
+tilePole('finanse','Finanse',[
+'Zdolny','brak zdolności','z pomocą','ma świadomość poziomu swoich dochodów','zna ceny i koszty życia','obsługuje konto bankowe','dochody na konto bankowe','dochody w postaci gotówkowej','posługuje się kartą','posługuje się gotówką','opiekun prawny'
+])+
+tilePole('urzedy','Urzędy',[
+'Zdolny','brak zdolności','z pomocą','wymaga pomocy w dotarciu','wymaga pomocy w wypełnieniu dokumentów','opiekun prawny'
+])
+);
+</script>
+</div>
+
+<!-- ================= 8 ================= -->
+<div class="box"><h2>Realizowanie zadań i obowiązków</h2>
+<script>
+document.write(
+pole('plan','Plan dnia',['Samodzielnie','w uzależnieniu od opiekunów','we współpracy z opiekunami'])+
+pole('rytm','Rytm',['Rytm dobowy zachowany','rytm dobowy zaburzony'])+
+pole('aktywnosc','Aktywność',['Zachowana','niska','bierność','pobudzenie'])+
+tilePole('zainteresowania','Zainteresowania',[
+'Oglądanie tv','słuchanie radia','krzyżówki','rozmowy z domownikami','rehabilitacja','spacery','brak zainteresowania otoczeniem'
+])
+);
+</script>
+</div>
+
+<!-- ===== DODANE: GENERATOR ===== -->
+<div class="box">
+<h2>Wynik opinii</h2>
+
+<div class="action-bar">
+<button onclick="generuj()">Generuj opinię</button>
+<button onclick="zapisz()">Zapisz do pliku .txt</button>
+</div>
+
+<textarea id="wynik" rows="25"></textarea>
+</div>
+
+<script>
+function zbierzSelecty(){
+let tekst='';
+
+document.querySelectorAll('select').forEach(el=>{
+const label=el.previousElementSibling.innerText;
+const uwagi=document.getElementById(el.id+'_uwagi')?.value;
+
+if(el.value){
+tekst+=label+': '+el.value;
+
+if(uwagi){
+tekst+=' ('+uwagi+')';
+}
+
+tekst+='\n';
+}
+
+// 🔥 jeśli brak wyboru, ale są uwagi
+else if(uwagi){
+tekst+=label+': '+uwagi+'\n';
+}
+
+});
+
+return tekst;
+}
+
+function zbierzPytania(){
+let tekst='';
+
+const pytania = [
+  {id:'pyt1', label:'niemożność wypełnienia kwestionariusza samooceny'},
+  {id:'pyt2', label:'pozyskanie informacji od opiekuna fizycznego osoby zainteresowanej'},
+  {id:'pyt3', label:'korzystanie z technologii wspomagających'},
+  {id:'pyt4', label:'prowadzenie jednoosobowego gospodarstwa domowego'},
+  {id:'pyt5', label:'samodzielne zarobkowanie'}
+];
+
+pytania.forEach(p=>{
+  const active = document.querySelector(`[data-group="${p.id}"].active`);
+  if(active){
+    tekst += p.label + ': ' + active.dataset.value + '\n';
+  }
+});
+
+return tekst + '\n';
+}
+
+
+function zbierzSprzet(){
+let tekst='';
+let tiles=document.querySelectorAll('[data-group="sprzet"].active');
+let uwagi=document.getElementById('sprzet_uwagi')?.value;
+
+if(tiles.length){
+let arr=[];
+tiles.forEach(t=>arr.push(t.dataset.value));
+
+tekst+='Technologie wspomagające: '+arr.join(', ');
+
+if(uwagi){
+tekst+=' ('+uwagi+')';
+}
+
+tekst+='\n\n';
+}
+
+// 🔥 tylko uwagi bez kafelków
+else if(uwagi){
+tekst+='Technologie wspomagające: '+uwagi+'\n\n';
+}
+
+return tekst;
+}
+function zbierzTile(){
+let tekst='';
+
+document.querySelectorAll('.tile-grid').forEach(grid=>{
+
+// ❗ pomijamy technologie wspomagające
+if(grid.querySelector('[data-group="sprzet"]')) return;
+
+const label=grid.previousElementSibling.innerText;
+const input=grid.nextElementSibling;
+const uwagi=input?.value;
+
+const tiles=grid.querySelectorAll('.tile.active');
+
+if(tiles.length){
+let arr=[];
+tiles.forEach(t=>arr.push(t.dataset.value));
+
+tekst+=label+': '+arr.join(', ');
+
+if(uwagi){
+tekst+=' ('+uwagi+')';
+}
+
+tekst+='\n';
+}
+
+// 🔥 tylko uwagi bez zaznaczeń
+else if(uwagi){
+tekst+=label+': '+uwagi+'\n';
+}
+
+});
+
+return tekst;
+}
+
+function zbierzSekcja(ids){
+let tekst='';
+
+ids.forEach(id=>{
+// SELECT
+const select=document.getElementById(id);
+const uwagi=document.getElementById(id+'_uwagi')?.value;
+
+if(select){
+const label=select.previousElementSibling.innerText;
+
+if(select.value){
+tekst+=label+': '+select.value;
+if(uwagi) tekst+=' ('+uwagi+')';
+tekst+='\n';
+}
+else if(uwagi){
+tekst+=label+': '+uwagi+'\n';
+}
+}
+
+// TILE
+const tiles=document.querySelectorAll(`[data-group="${id}"].active`);
+const grid=document.querySelector(`[data-group="${id}"]`)?.closest('.tile-grid');
+
+if(grid){
+const label=grid.previousElementSibling.innerText;
+const input=grid.nextElementSibling;
+const uwagiTile=input?.value;
+
+if(tiles.length){
+let arr=[];
+tiles.forEach(t=>arr.push(t.dataset.value));
+
+tekst+=label+': '+arr.join(', ');
+if(uwagiTile) tekst+=' ('+uwagiTile+')';
+tekst+='\n';
+}
+else if(uwagiTile){
+tekst+=label+': '+uwagiTile+'\n';
+}
+}
+});
+
+return tekst;
+}
+function generuj(){
+let t='';
+
+// dane podstawowe
+t+=document.getElementById('imie').value+', ';
+t+=document.getElementById('wiek').value+' lat.\n\n';
+
+t+='Choroby: '+document.getElementById('choroby').value+'\n\n';
+
+// technologie
+t+=zbierzSprzet();
+t+=zbierzPytania();
+
+// 🔽 SEKCJE
+t+='=== MOBILNOŚĆ ===\n';
+t+=zbierzSekcja(['pozycja','dom','poza','schody','transport','manualna']);
+
+t+='\n=== KOMUNIKOWANIE SIĘ ===\n';
+t+=zbierzSekcja(['wzrok','sluch','rozumienie','odpowiedzi','rozmowa','orientacja','czytanie','pisanie']);
+
+t+='\n=== NABYWANIE I STOSOWANIE WIEDZY ===\n';
+t+=zbierzSekcja(['nauka','telefon','pilot','agd','decyzje','koncentracja','pamiec']);
+
+t+='\n=== DBANIE O SIEBIE I ZDROWIE ===\n';
+t+=zbierzSekcja(['kapiel','mycie','zeby','paznokcie','ubieranie','toaleta','leki','wizyty','posilki','pozostawanie']);
+
+t+='\n=== KONTAKTY INTERPERSONALNE ===\n';
+t+=zbierzSekcja(['mieszka','dzieci','odwiedziny','relacje','psychika','psycholog','psychiatra','leki_psych']);
+
+t+='\n=== AKTYWNOŚĆ W GOSPODARSTWIE DOMOWYM ===\n';
+t+=zbierzSekcja(['zakupy','dom_prace','posilki_dom']);
+
+t+='\n=== FUNKCJONOWANIE W SPOŁECZEŃSTWIE ===\n';
+t+=zbierzSekcja(['finanse','urzedy']);
+
+t+='\n=== REALIZOWANIE ZADAŃ I OBOWIĄZKÓW ===\n';
+t+=zbierzSekcja(['plan','rytm','aktywnosc','zainteresowania']);
+
+document.getElementById('wynik').value=t;
+}
+
+async function zapisz(){
+const text=document.getElementById('wynik').value;
+const imie=document.getElementById('imie').value || 'opinia';
+
+const fileName=imie.replace(/[\\/:*?"<>|]/g,'_')+'.txt';
+const blob=new Blob([text],{type:'text/plain'});
+
+if(navigator.canShare && window.File){
+const file=new File([blob],fileName,{type:'text/plain'});
+if(navigator.canShare({files:[file]})){
+try{
+await navigator.share({files:[file],title:'Opinia',text:'Wygenerowana opinia'});
+return;
+}catch(e){
+if(e && e.name === 'AbortError') return;
+}
+}
+}
+
+const a=document.createElement('a');
+
+a.href=URL.createObjectURL(blob);
+a.download=fileName;
+document.body.appendChild(a);
+a.click();
+document.body.removeChild(a);
+
+setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+}
+</script>
+
+<script>
+if('serviceWorker' in navigator){
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('service-worker.js').catch(() => {});
+  });
+}
+</script>
+
+</body>
+</html>
