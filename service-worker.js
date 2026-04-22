@@ -1,4 +1,4 @@
-const CACHE_NAME = 'generator-opinii-pwa-v1';
+const CACHE_NAME = 'generator-opinii-pwa-v2';
 const APP_FILES = [
   './',
   './index.html',
